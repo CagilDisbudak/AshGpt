@@ -2,11 +2,20 @@
 
 A cross-platform mobile app (Android + iOS) built with Expo and TypeScript to interact with a local Jan AI OpenAI-compatible server.
 
-## Privacy: All Data Stays on Your Device
+> **Veriler sadece sizde.** Ayarlar, sohbetler ve mesajlar yalnızca telefonda saklanır; buluta hiçbir şey gitmez.  
+> **All data stays local.** Settings, chats, and messages are stored only on your phone; nothing is sent to the cloud.
+
+## Privacy: All Data Stays on Your Device (Local Only)
 
 **Tüm veriler cihazınızda kalır.** Ayarlar, sohbet geçmişi ve mesajlar yalnızca telefonunuzda (AsyncStorage) saklanır; hiçbir veri buluta veya harici sunuculara gönderilmez. Jan AI sunucusu kendi bilgisayarınızda çalıştığı için yalnızca siz ve cihazınız arasında iletişim vardır.
 
 **All data remains on your device.** Settings, chat history, and messages are stored only on your phone (AsyncStorage); no data is sent to the cloud or external servers. Because the Jan AI server runs on your own PC, communication stays between you and your devices.
+
+| Nerede saklanır? | Buluta gider mi? |
+|------------------|-------------------|
+| Ayarlar (Base URL, model, tema) | Hayır |
+| Sohbet listesi ve mesajlar | Hayır |
+| Tema tercihi (açık/koyu/ChatGPT) | Hayır |
 
 ## Features
 
@@ -50,6 +59,64 @@ A cross-platform mobile app (Android + iOS) built with Expo and TypeScript to in
 - Enter the **Model name** (found in Jan's Model Hub, e.g., `Meta-Llama-3_1-8B-Instruct-IQ4_XS`).
 - Tap **Test Connection** to verify.
 - Tap **Save Settings** and return to the Chat screen.
+
+## Building APK (Android)
+
+### Yöntem 1: Yerel build (EAS / bulut yok)
+
+APK'yı kendi bilgisayarınızda, EAS veya Expo Go kullanmadan almak için:
+
+**Gereksinimler:** Node.js, JDK 17, Android SDK (`ANDROID_HOME` tanımlı; Android Studio kuruluysa genelde hazırdır).
+
+1. Native Android projesini oluşturun (ilk seferde veya `app.json` değişince):
+   ```bash
+   npm run prebuild:android
+   ```
+   Bu komut `android/` klasörünü oluşturur.
+
+2. Release APK üretin:
+   ```bash
+   npm run build:apk
+   ```
+   Bu komut `expo run:android --variant release` çalıştırır ve APK'yı derler.
+
+3. APK konumu: `android/app/build/outputs/apk/release/app-release.apk`  
+   Bu dosyayı telefona atıp kurabilirsiniz.
+
+**Windows'ta Gradle'ı elle çalıştırmak isterseniz:**
+   ```bash
+   npm run prebuild:android
+   cd android
+   gradlew.bat assembleRelease
+   ```
+
+---
+
+### Yöntem 2: EAS Build (bulut)
+
+Telefonunuza kurulum için **EAS Build** kullanabilirsiniz (ücretsiz Expo hesabı gerekir).
+
+### 1. EAS CLI ve giriş
+```bash
+npm install -g eas-cli
+eas login
+```
+(Expo hesabınız yoksa [expo.dev](https://expo.dev) üzerinden ücretsiz kayıt olun.)
+
+### 2. APK build
+```bash
+npm run build:android
+```
+veya doğrudan:
+```bash
+eas build --platform android --profile preview
+```
+
+### 3. İndirme ve kurulum
+- Build tamamlanınca Expo dashboard’da çıkan **APK indir** linkine tıklayın.
+- APK’yı telefona atıp (USB, e-posta veya tarayıcıdan indirip) kurun. “Bilinmeyen kaynaklardan yükleme”ye izin vermeniz gerekebilir.
+
+`eas.json` içinde `preview` ve `production` profilleri **APK** üretecek şekilde ayarlıdır (Play Store için AAB değil).
 
 ## Troubleshooting
 
